@@ -1,0 +1,39 @@
+
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+  application:
+    name: Flico
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql:storage}
+    username: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+storage:
+  config:
+    bucket: flico-307e8.appspot.com
+    key:
+      url: C:\Users\Cristopher Moccia\Desktop\keyFlico\keyGoogleStorage.json
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+    liquibase: info
+server:
+  port: 8085
