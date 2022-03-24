@@ -28,6 +28,7 @@ storage:
     bucket: flico-307e8.appspot.com
     key:
       url: C:\Users\Cristopher Moccia\Desktop\keyFlico\keyGoogleStorage.json
+      # url:/Users/antoninolatocca/Developer/Flico/keyGoogleStorage.json
 
 logging:
   level:
