@@ -24,4 +24,9 @@ public class StorageController {
         return new ResponseEntity<>(this.uploadFileCommand.execute(request), HttpStatus.CREATED);
     }
 
+    @GetMapping(value = "/test")
+    public ResponseEntity<Void> getting(){
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
+
 }

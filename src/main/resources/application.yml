@@ -26,6 +26,7 @@ storage:
     bucket: flico-307e8.appspot.com
     key:
       url: C:\Users\Cristopher Moccia\Desktop\FLICO\keyFlico\keyGoogleStorage.json
+      # url: /keys/key-firebase.json
       # url:/Users/antoninolatocca/Developer/Flico/keyGoogleStorage.json
 
 url:
