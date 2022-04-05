@@ -79,7 +79,7 @@
         <dependency>
             <groupId>it.dcm.rest</groupId>
             <artifactId>ModelDTORestServices</artifactId>
-            <version>0.0.13</version>
+            <version>0.0.14</version>
         </dependency>
     </dependencies>
 
@@ -97,8 +97,8 @@
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>it.dcm.rest</groupId>
                             <artifactId>ModelDTORestServices</artifactId>
-                            <version>0.0.13</version>
-                            <file>${basedir}/externalLibs/ModelDTORestServices-0.0.13.jar</file>
+                            <version>0.0.14</version>
+                            <file>${basedir}/externalLibs/ModelDTORestServices-0.0.14.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
