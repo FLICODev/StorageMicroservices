@@ -10,11 +10,13 @@
     </parent>
     <groupId>it.dcm</groupId>
     <artifactId>storage</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>storage</name>
     <description>storage</description>
+    <packaging>war</packaging>
+
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -28,6 +30,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -68,25 +79,31 @@
         <dependency>
             <groupId>it.dcm.rest</groupId>
             <artifactId>ModelDTORestServices</artifactId>
-            <version>0.0.8</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/externalLib/ModelDTORestServices-0.0.8.jar</systemPath>
+            <version>0.0.13</version>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-external-non-maven-jar</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>it.dcm.rest</groupId>
+                            <artifactId>ModelDTORestServices</artifactId>
+                            <version>0.0.13</version>
+                            <file>${basedir}/externalLibs/ModelDTORestServices-0.0.13.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
