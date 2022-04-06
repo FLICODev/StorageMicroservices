@@ -13,4 +13,7 @@ public interface FirebaseAuthentication {
 
     String getLinkConfirmEmail(String email, String uid);
 
+    String getLinkResetPassword(String email, String uid);
+
+
 }

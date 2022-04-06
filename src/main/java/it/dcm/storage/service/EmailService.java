@@ -7,4 +7,6 @@ public interface EmailService {
 
     void sendLinkEmailVerification(EmailVerificationRequestDTO request);
 
+    void sendLinkResetPassword(EmailVerificationRequestDTO request);
+
 }

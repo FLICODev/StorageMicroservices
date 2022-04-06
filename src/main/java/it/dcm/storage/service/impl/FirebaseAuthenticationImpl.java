@@ -1,7 +1,5 @@
 package it.dcm.storage.service.impl;
 
-
-import com.google.api.Http;
 import com.google.firebase.auth.*;
 import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.configuration.GoogleCloudStorage;
@@ -82,6 +80,19 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
                     .setUrl(pathFlico + "/verified&uid="+uid)
                     .build();
             return this.gcs.getAuth().generateEmailVerificationLink(email, settings);
+        } catch (FirebaseAuthException ex){
+            log.error("Error with generation link email verification : {}", ex.getLocalizedMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found or other error");
+        }
+    }
+
+    @Override
+    public String getLinkResetPassword(String email, String uid){
+        try {
+            ActionCodeSettings settings = ActionCodeSettings.builder()
+                    .setUrl(pathFlico + "/verified&uid="+uid)
+                    .build();
+            return this.gcs.getAuth().generatePasswordResetLink(email, settings);
         } catch (FirebaseAuthException ex){
             log.error("Error with generation link email verification : {}", ex.getLocalizedMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found or other error");
