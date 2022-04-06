@@ -3,6 +3,7 @@ package it.dcm.storage.controller;
 
 import it.dcm.rest.authentication.FirebaseAccount;
 import it.dcm.storage.command.CreationUserCommand;
+import it.dcm.storage.command.ResetPasswordCommand;
 import it.dcm.storage.mapper.AccountMapper;
 import it.dcm.storage.service.FirebaseAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class AuthenticationController {
     private FirebaseAuthentication firebaseAuthentication;
     @Autowired
     private CreationUserCommand creationUserCommand;
+    @Autowired
+    private ResetPasswordCommand resetPasswordCommand;
 
 
 
@@ -42,11 +45,17 @@ public class AuthenticationController {
 
     @GetMapping(value = "/find-email/{email}")
     public ResponseEntity<FirebaseAccount> getFromEmail(@PathVariable String email){
-        this.firebaseAuthentication.getFromMail(email);
         return ResponseEntity.ok(
                 AccountMapper.toAccount(
                         this.firebaseAuthentication.getFromMail(email)
                 ));
+    }
+
+
+    @GetMapping(value = "/reset-password/{email}")
+    public ResponseEntity<FirebaseAccount> getResetPassword(@PathVariable String email){
+        resetPasswordCommand.execute(email);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -26,4 +26,15 @@ public class EmailServiceImpl implements EmailService {
             log.error("Send email verification link not sended because : {}", ex.getLocalizedMessage());
         }
     }
+
+    @Override
+    public void sendLinkResetPassword(EmailVerificationRequestDTO dto) {
+        try{
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<EmailVerificationRequestDTO> request = new HttpEntity<>(dto);
+            restTemplate.exchange(basePath+"/reset-password", HttpMethod.POST, request, Void.class);
+        } catch (Exception ex){
+            log.error("Send email verification link not sended because : {}", ex.getLocalizedMessage());
+        }
+    }
 }
