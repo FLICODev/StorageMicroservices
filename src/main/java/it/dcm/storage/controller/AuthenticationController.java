@@ -55,7 +55,9 @@ public class AuthenticationController {
     @GetMapping(value = "/reset-password/{email}")
     public ResponseEntity<FirebaseAccount> getResetPassword(@PathVariable String email){
         resetPasswordCommand.execute(email);
-        return ResponseEntity.ok().build();
+        FirebaseAccount firebaseAccount = new FirebaseAccount();
+        firebaseAccount.setEmail(email);
+        return ResponseEntity.ok(firebaseAccount);
     }
 
 
