@@ -26,6 +26,8 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
     @Override
     public FirebaseToken validateTokenId(String bearerToken) {
         try {
+            log.info("First");
+            log.info(bearerToken);
             FirebaseToken token = gcs.getAuth().verifyIdToken(bearerToken.substring(7));
             log.info("User logged is : {} email and uid {}", token.getEmail(), token.getUid());
             return token;
