@@ -9,8 +9,8 @@ spring:
     name: storage
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:postgresql:storage}
-    username: ${JDBC_DATABASE_USERNAME:postgres}
-    password: ${JDBC_DATABASE_PASSWORD:postgres}
+    username: ${JDBC_DATABASE_USERNAME:Flico_Admin}
+    password: ${JDBC_DATABASE_PASSWORD:FLICO_Admin_Developer}
   jpa:
     hibernate:
       ddl-auto: none
