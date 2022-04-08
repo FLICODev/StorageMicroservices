@@ -33,7 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        authorize(request, (request.getHeader("Authorization") == null) ? null : request.getHeader("Authorization").substring(7));
+        authorize(request, (request.getHeader("Authorization") == null) ? null : request.getHeader("Authorization"));
         filterChain.doFilter(request, response);
     }
 
