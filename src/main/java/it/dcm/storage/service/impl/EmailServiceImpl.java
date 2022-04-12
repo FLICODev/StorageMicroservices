@@ -22,6 +22,7 @@ public class EmailServiceImpl implements EmailService {
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<EmailVerificationRequestDTO> request = new HttpEntity<>(dto);
             restTemplate.exchange(basePath+"/verification", HttpMethod.POST, request, Void.class);
+            log.info("Email verification sended");
         } catch (Exception ex){
             log.error("Send email verification link not sended because : {}", ex.getLocalizedMessage());
         }
