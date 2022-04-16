@@ -10,6 +10,7 @@ public enum ExceptionEnum implements ExceptionType {
     AUTH_USER_ALREADY_EXIST("AUTH_USER_ALREADY_EXIST", "The user already exist with this email"),
     AUTH_PASSW_LENGTH("AUTH_PASSW_LENGTH", "The password must be at least 6 character long"),
     AUTH_PASSW_NULL("AUTH_PASSW_NULL", "The password must not be null"),
+    AUTH_VALIDATION_TOKEN_NULL("AUTH_VALIDATION_TOKEN_NULL", "The token is invalid or expired"),
     ;
 
 

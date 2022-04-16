@@ -5,9 +5,11 @@ import it.dcm.rest.storage.RequestUpload;
 import it.dcm.rest.storage.ResponseUpload;
 import it.dcm.storage.mapper.FileCloudMapper;
 import it.dcm.storage.model.FileCloud;
+import it.dcm.storage.security.SecurityService;
 import it.dcm.storage.service.FileService;
 import it.dcm.storage.service.StorageCloud;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +25,8 @@ public class UploadFileCommand  extends AbstractBaseCommand<RequestUpload, Respo
 
     private final FileService fileService;
     private final StorageCloud storageCloud;
+    @Autowired
+    private SecurityService securityService;
 
     public UploadFileCommand(FileService fileService, StorageCloud storageCloud) {
         this.fileService = fileService;
@@ -48,10 +52,13 @@ public class UploadFileCommand  extends AbstractBaseCommand<RequestUpload, Respo
             log.info("Search file with {} id", request.getId());
             try {
                 find = this.fileService.get(request.getId());
+                find.setUpdater(securityService.getUser().getUid());
                 log.info("File found");
             } catch (ResponseStatusException ignored){
                 log.info("File entity not found");
             }
+        } else {
+            find.setCreator(securityService.getUser().getUid());
         }
 
         FileCloudMapper.toEntity(find, request);

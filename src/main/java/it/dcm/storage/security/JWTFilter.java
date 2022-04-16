@@ -1,16 +1,16 @@
 package it.dcm.storage.security;
 
 import com.google.firebase.auth.FirebaseToken;
+
+import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.dto.Credentials;
 import it.dcm.storage.dto.User;
 import it.dcm.storage.service.FirebaseAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,8 +19,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+
+import static it.dcm.storage.exception.ExceptionEnum.AUTH_VALIDATION_TOKEN_NULL;
 
 @Component
 @Slf4j
@@ -33,40 +34,48 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        authorize(request, (request.getHeader("Authorization") == null) ? null : request.getHeader("Authorization"));
+        authorize(request, request.getHeader("Authorization"));
         filterChain.doFilter(request, response);
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request)
-            throws ServletException {
-        String path = request.getRequestURI();
-        return "/api/auth/create".equals(path);
-    }
 
+    /**
+     * Logica per poter capire se autorizzare o no il token passato nell'header
+     * @param request modello proveniente dalla richiesta
+     * @param token Stringa proveniente dalla header Authorization
+     */
     private void authorize(HttpServletRequest request, String token) {
-        String sessionCookieValue = null;
-        FirebaseToken decodedToken = null;
-        Credentials.CredentialType type = null;
+        FirebaseToken account = null;
 
+        //convalidate token
+        if (validateToken(token)) {
 
-        if ( token != null && !token.equals("null")
-                && !token.equalsIgnoreCase("undefined")) {
-            decodedToken = firebaseAuthentication.validateTokenId(token);
-            type = Credentials.CredentialType.ID_TOKEN;
+            //validate token from firebase auth call the microservice
+            log.info("Token is valid {}", token);
+            account = firebaseAuthentication.validateTokenId(token);
+            if (account == null){
+                log.error("Authentication microservices is response error");
+                throw new ResponseEntityException(
+                        AUTH_VALIDATION_TOKEN_NULL,
+                        AUTH_VALIDATION_TOKEN_NULL.getMessage(),
+                        HttpStatus.FORBIDDEN
+                );
+            }
+
         }
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        User user = firebaseTokenToUserDto(decodedToken);
-        // Handle roles
-        if (user != null) {
-            // Set security context
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
-                    new Credentials(type, decodedToken, token, sessionCookieValue), authorities);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        //Retrieve profile from DB if account not null
+        User profile = firebaseTokenToUserDto(account);
+
+        // if account and profile not null
+        if (account != null && profile != null) {
+            log.info("Account from firebase and profile is not null");
+            // Create authentication token
+            setUpAuthenticationSpring(profile, account);
+            log.info("Security context is settings");
         }
     }
+
 
     private User firebaseTokenToUserDto(FirebaseToken decodedToken) {
         User user = null;
@@ -78,6 +87,26 @@ public class JWTFilter extends OncePerRequestFilter {
             user.setEmailVerified(decodedToken.isEmailVerified());
         }
         return user;
+    }
+
+    private void setUpAuthenticationSpring(User profile, FirebaseToken token){
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        profile,
+                        new Credentials(token, profile.getUid(), new Date())
+                );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    /**
+     * Validation Token dalla header della request
+     * @param token is a String della header
+     * @return true/false
+     */
+    private boolean validateToken(String token){
+        return token != null && !token.equals("null") &&
+                !token.equalsIgnoreCase("undefined") &&
+                token.contains("Bearer") && !token.contains("null");
     }
 
 }
