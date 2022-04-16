@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import static it.dcm.storage.exception.ExceptionEnum.AUTH_FIREBASE_ERROR;
-import static it.dcm.storage.exception.ExceptionEnum.GENERIC_ERROR;
+import static it.dcm.storage.exception.ExceptionEnum.*;
 
 @Slf4j
 @Service
@@ -68,10 +67,10 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
         } catch (FirebaseAuthException e) {
             if (e.getAuthErrorCode() == AuthErrorCode.USER_NOT_FOUND){
                 log.info("user not found with this mail : {}", email);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+                throw new ResponseEntityException(AUTH_USER_NOT_EXIST, AUTH_USER_NOT_EXIST.getMessage(), HttpStatus.NOT_FOUND);
             }
             log.error("Other error {}", e.getAuthErrorCode().toString());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseEntityException(GENERIC_ERROR, GENERIC_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

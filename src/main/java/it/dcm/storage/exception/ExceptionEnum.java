@@ -8,6 +8,7 @@ public enum ExceptionEnum implements ExceptionType {
     GENERIC_ERROR("GENERIC ERROR", "Control logs"),
     AUTH_FIREBASE_ERROR("AUTH_FIREBASE_ERROR", "Only code from exception"),
     AUTH_USER_ALREADY_EXIST("AUTH_USER_ALREADY_EXIST", "The user already exist with this email"),
+    AUTH_USER_NOT_EXIST("AUTH_USER_NOT_EXIST", "The user with this email NOT EXIST"),
     AUTH_PASSW_LENGTH("AUTH_PASSW_LENGTH", "The password must be at least 6 character long"),
     AUTH_PASSW_NULL("AUTH_PASSW_NULL", "The password must not be null"),
     AUTH_VALIDATION_TOKEN_NULL("AUTH_VALIDATION_TOKEN_NULL", "The token is invalid or expired"),
