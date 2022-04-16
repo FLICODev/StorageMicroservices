@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,6 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 import static it.dcm.storage.exception.ExceptionEnum.AUTH_VALIDATION_TOKEN_NULL;
@@ -54,7 +58,7 @@ public class JWTFilter extends OncePerRequestFilter {
             log.info("Token is valid {}", token);
             account = firebaseAuthentication.validateTokenId(token);
             if (account == null){
-                log.error("Authentication microservices is response error");
+                log.info("Authentication microservices is response error");
                 throw new ResponseEntityException(
                         AUTH_VALIDATION_TOKEN_NULL,
                         AUTH_VALIDATION_TOKEN_NULL.getMessage(),
@@ -71,7 +75,7 @@ public class JWTFilter extends OncePerRequestFilter {
         if (account != null && profile != null) {
             log.info("Account from firebase and profile is not null");
             // Create authentication token
-            setUpAuthenticationSpring(profile, account);
+            setUpAuthenticationSpring(profile, token);
             log.info("Security context is settings");
         }
     }
@@ -89,11 +93,12 @@ public class JWTFilter extends OncePerRequestFilter {
         return user;
     }
 
-    private void setUpAuthenticationSpring(User profile, FirebaseToken token){
+    private void setUpAuthenticationSpring(User profile, String token){
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
                         profile,
-                        new Credentials(token, profile.getUid(), new Date())
+                        new Credentials(token, profile.getUid(), new Date()),
+                        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
                 );
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

@@ -31,10 +31,9 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
             log.info("User logged is : {} email and uid {}", token.getEmail(), token.getUid());
             return token;
         } catch (FirebaseAuthException e) {
-            log.error("Error firebase {}", e.getAuthErrorCode());
+            log.info("Error firebase {}", e.getAuthErrorCode());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-
     }
 
     @Override
