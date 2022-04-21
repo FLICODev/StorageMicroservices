@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 
@@ -26,11 +25,11 @@ public class StorageCloudImpl implements StorageCloud {
     }
 
     @Override
-    public String updateFile(byte[] file, String filename, String directory, String contentType) {
+    public void updateFile(byte[] file, String filename, String directory, String contentType) {
         log.info("UPLOAD FILE ");
         log.info("Name file : {}", filename);
         log.info("Directory : {}", directory);
-        try{
+        try {
             Bucket bucket = gcs.getStorage().bucket();
             Storage storage = bucket.getStorage();
             BlobId blobId = BlobId.of(this.bucketName ,  directory + "/" + filename);
@@ -39,11 +38,23 @@ public class StorageCloudImpl implements StorageCloud {
                     .setCacheControl("max-age=0")
                     .build().update();
             storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
-        } catch (Exception exception){
+        } catch (Exception exception) {
             log.error("Error with upload image {}", exception.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File not uploaded");
         }
-        return null;
+    }
+
+    @Override
+    public void deleteFile(String path) {
+        try {
+            Bucket bucket = gcs.getStorage().bucket();
+            Storage storage = bucket.getStorage();
+            BlobId blobId = BlobId.of(this.bucketName, path);
+            storage.delete(blobId);
+        } catch (Exception exception) {
+            log.error("Error with upload image {}", exception.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File not deleted");
+        }
     }
 
 
