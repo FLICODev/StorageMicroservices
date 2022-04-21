@@ -13,11 +13,6 @@ public class FileCloudMapper {
         file.setContentType(requestUpload.getContentType());
         file.setDirectory(requestUpload.getDirectory());
         file.setSize(requestUpload.getSize());
-        if (file.getId() == 0){
-            file.setCreator("Admin");
-        } else {
-            file.setUpdater((file.getUpdater() == null) ? "Admin" : file.getUpdater());
-        }
     }
 
 
