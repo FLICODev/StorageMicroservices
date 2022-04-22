@@ -28,6 +28,7 @@ public class StorageController {
 
     @DeleteMapping(value = "/remove/{id}")
     public ResponseEntity<Void> remove(@PathVariable long id) {
+        log.info("Remove file {}", id);
         this.removeFileCommand.execute(id);
         return new ResponseEntity<>( HttpStatus.OK);
     }

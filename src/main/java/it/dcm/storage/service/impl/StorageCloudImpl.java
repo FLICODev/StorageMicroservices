@@ -52,7 +52,7 @@ public class StorageCloudImpl implements StorageCloud {
             BlobId blobId = BlobId.of(this.bucketName, path);
             storage.delete(blobId);
         } catch (Exception exception) {
-            log.error("Error with upload image {}", exception.getMessage());
+            log.error("Error with deleted image {}", exception.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File not deleted");
         }
     }

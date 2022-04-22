@@ -46,7 +46,6 @@ public class AuthenticationController {
                     GENERIC_ERROR.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
-
         FirebaseAccount firebaseAccount  = new FirebaseAccount();
         firebaseAccount.setUid(token.getUid());
         firebaseAccount.setEmail(token.getEmail());
