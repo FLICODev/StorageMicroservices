@@ -5,16 +5,10 @@ pipeline {
 
     stages {
 
-        stage('Clone') {
-            steps {
-                echo 'Clone branchName ' + branchName
-                sh 'mkdir -p storage'
-
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh 'mvn clean install'
             }
         }
         stage('Test') {
