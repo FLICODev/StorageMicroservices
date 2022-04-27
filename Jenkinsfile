@@ -6,7 +6,10 @@ pipeline {
     stages {
 
         stage('Clone') {
-            echo 'Clone branchName ' + branchName
+            steps {
+                echo 'Clone branchName ' + branchName
+
+            }
         }
         stage('Build') {
             steps {
