@@ -8,6 +8,7 @@ pipeline {
         stage('Clone') {
             steps {
                 echo 'Clone branchName ' + branchName
+                sh 'mkdir -p /home/ubuntu/services/storage'
 
             }
         }
