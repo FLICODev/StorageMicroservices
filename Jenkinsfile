@@ -17,5 +17,10 @@ pipeline {
                 sh 'cp -b target/storage.war /opt/tomcat/webapps'
             }
         }
+        stage('Deploy'){
+            steps{
+                sh 'systemctl tomcat restart'
+            }
+        }
     }
 }
