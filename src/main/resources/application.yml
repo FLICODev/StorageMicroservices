@@ -34,7 +34,7 @@ url:
     basePath: https://flico.it
   microservice:
     email:
-      basePath: https://api.flico.it:8443/email/api/mail
+      basePath: http://api.flico.it:8080/email/api/mail
 
 logging:
   level:
