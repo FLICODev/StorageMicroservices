@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Move War') {
             steps{
-                sh 'rm /opt/tomcat/webapps/storage.war'
+                sh 'rm /p/a/t/h 2> /opt/tomcat/webapps/storage.war'
                 sh 'cp -b target/storage.war /opt/tomcat/webapps'
             }
         }
