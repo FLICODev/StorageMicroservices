@@ -11,14 +11,9 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+        stage('Move War') {
+            steps{
+                sh 'cp -b target/storage.war /opt/tomcat/webapps'
             }
         }
     }
