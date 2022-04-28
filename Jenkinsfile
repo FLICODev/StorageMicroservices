@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Deploy'){
             steps{
-                sh 'systemctl tomcat restart'
+                sh 'systemctl restart tomcat'
             }
         }
     }
