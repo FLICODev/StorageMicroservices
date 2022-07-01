@@ -33,13 +33,13 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
             return gcs.getAuth().updateUser(request);
         } catch (FirebaseAuthException authException){
             if (authException.getAuthErrorCode() != null){
-                log.error("Error with creation user : {}",authException.getAuthErrorCode().toString());
+                log.info("Error with creation user : {}",authException.getAuthErrorCode().toString());
                 throw new ResponseEntityException(AUTH_FIREBASE_ERROR, authException.getAuthErrorCode().toString(), HttpStatus.BAD_REQUEST);
             }
-            log.error("Error exception non null {}", authException.getLocalizedMessage());
+            log.info("Error exception non null {}", authException.getLocalizedMessage());
             throw new ResponseEntityException(GENERIC_ERROR, GENERIC_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch(Exception ex){
-            log.error("Error exception : {}", ex.getLocalizedMessage());
+            log.info("Error exception : {}", ex.getLocalizedMessage());
             throw new ResponseEntityException(ExceptionEnum.AUTH_USER_ALREADY_EXIST, "Error", HttpStatus.BAD_REQUEST);
         }
 
