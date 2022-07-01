@@ -15,5 +15,6 @@ public interface FirebaseAuthentication {
 
     String getLinkResetPassword(String email, String uid);
 
+    UserRecord editDisplayName(String displayName, String uid);
 
 }
