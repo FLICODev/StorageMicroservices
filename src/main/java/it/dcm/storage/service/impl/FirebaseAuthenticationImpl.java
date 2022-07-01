@@ -1,7 +1,6 @@
 package it.dcm.storage.service.impl;
 
 import com.google.firebase.auth.*;
-import it.dcm.rest.authentication.FirebaseAccount;
 import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.configuration.GoogleCloudStorage;
 import it.dcm.storage.exception.ExceptionEnum;
@@ -27,11 +26,13 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
 
     @Override
     public UserRecord editDisplayName(String displayName, String uid){
+        log.info("Edit displayName : {} {}", displayName, uid);
         try {
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
                     .setDisplayName(displayName);
             return gcs.getAuth().updateUser(request);
         } catch (FirebaseAuthException authException){
+            log.info("ERROR EXCEPTION {}", authException.getLocalizedMessage());
             if (authException.getAuthErrorCode() != null){
                 log.info("Error with creation user : {}",authException.getAuthErrorCode().toString());
                 throw new ResponseEntityException(AUTH_FIREBASE_ERROR, authException.getAuthErrorCode().toString(), HttpStatus.BAD_REQUEST);
