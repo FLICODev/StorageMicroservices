@@ -30,7 +30,10 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
         try {
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
                     .setDisplayName(displayName);
-            return gcs.getAuth().updateUser(request);
+
+            UserRecord record =  gcs.getAuth().updateUser(request);
+            log.info("New Display name : {}", record.getDisplayName());
+            return record;
         } catch (FirebaseAuthException authException){
             log.info("ERROR EXCEPTION {}", authException.getLocalizedMessage());
             if (authException.getAuthErrorCode() != null){
