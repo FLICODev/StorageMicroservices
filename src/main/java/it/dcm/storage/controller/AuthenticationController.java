@@ -5,12 +5,13 @@ import com.google.firebase.auth.FirebaseToken;
 import it.dcm.rest.authentication.FirebaseAccount;
 import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.command.CreationUserCommand;
+import it.dcm.storage.command.EditProfileCommand;
 import it.dcm.storage.command.ResetPasswordCommand;
-import it.dcm.storage.exception.ExceptionEnum;
 import it.dcm.storage.mapper.AccountMapper;
 import it.dcm.storage.service.FirebaseAuthentication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,8 @@ public class AuthenticationController {
     private CreationUserCommand creationUserCommand;
     @Autowired
     private ResetPasswordCommand resetPasswordCommand;
-
+    @Autowired
+    private EditProfileCommand editProfileCommand;
 
 
     @GetMapping(value = "/validate-token")
@@ -68,6 +70,13 @@ public class AuthenticationController {
                 AccountMapper.toAccount(
                         this.firebaseAuthentication.getFromMail(email)
                 ));
+    }
+
+    @PostMapping(value = "/edit-profile")
+    public ResponseEntity<FirebaseAccount> EditProfile(@RequestParam String name, @RequestParam String surname){
+        return ResponseEntity.ok(
+             editProfileCommand.execute(Pair.of(name, surname))
+        );
     }
 
 

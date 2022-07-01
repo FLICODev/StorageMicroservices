@@ -1,6 +1,7 @@
 package it.dcm.storage.service.impl;
 
 import com.google.firebase.auth.*;
+import it.dcm.rest.authentication.FirebaseAccount;
 import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.configuration.GoogleCloudStorage;
 import it.dcm.storage.exception.ExceptionEnum;
@@ -21,6 +22,28 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
     private String pathFlico;
     @Autowired
     private GoogleCloudStorage gcs;
+
+
+
+    @Override
+    public UserRecord editDisplayName(String displayName, String uid){
+        try {
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
+                    .setDisplayName(displayName);
+            return gcs.getAuth().updateUser(request);
+        } catch (FirebaseAuthException authException){
+            if (authException.getAuthErrorCode() != null){
+                log.error("Error with creation user : {}",authException.getAuthErrorCode().toString());
+                throw new ResponseEntityException(AUTH_FIREBASE_ERROR, authException.getAuthErrorCode().toString(), HttpStatus.BAD_REQUEST);
+            }
+            log.error("Error exception non null {}", authException.getLocalizedMessage());
+            throw new ResponseEntityException(GENERIC_ERROR, GENERIC_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch(Exception ex){
+            log.error("Error exception : {}", ex.getLocalizedMessage());
+            throw new ResponseEntityException(ExceptionEnum.AUTH_USER_ALREADY_EXIST, "Error", HttpStatus.BAD_REQUEST);
+        }
+
+    }
 
     @Override
     public FirebaseToken validateTokenId(String bearerToken) {
