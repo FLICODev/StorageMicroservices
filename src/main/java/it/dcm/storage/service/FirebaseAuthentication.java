@@ -11,7 +11,7 @@ public interface FirebaseAuthentication {
 
     UserRecord getFromMail(String email);
 
-    String getLinkConfirmEmail(String email, String uid);
+    String getLinkConfirmEmail(String email);
 
     String getLinkResetPassword(String email, String uid);
 

@@ -35,7 +35,7 @@ public class CreationUserCommand extends AbstractBaseCommand<FirebaseAccount, Fi
         log.info("Passed validation");
         UserRecord record = this.firebaseAuthentication.create(model.getEmail(), model.getPassword(), model.getLabel());
         log.info("User firebase created {}", record.getUid());
-        String linkEmail = this.firebaseAuthentication.getLinkConfirmEmail(record.getEmail(), record.getUid());
+        String linkEmail = this.firebaseAuthentication.getLinkConfirmEmail(record.getEmail());
         log.info("Get link verification email {}", linkEmail);
         EmailVerificationRequestDTO requestVerification = new EmailVerificationRequestDTO();
         requestVerification.setEmail(record.getEmail());

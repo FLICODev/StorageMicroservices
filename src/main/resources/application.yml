@@ -31,7 +31,7 @@ storage:
 
 url:
   flico:
-    basePath: https://flico.it
+    basePath: https://flico.it/app
   microservice:
     email:
       basePath: http://api.flico.it:8080/email/api/mail

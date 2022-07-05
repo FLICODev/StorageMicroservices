@@ -31,7 +31,7 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(uid)
                     .setDisplayName(displayName);
 
-            UserRecord record =  gcs.getAuth().updateUser(request);
+            UserRecord record = gcs.getAuth().updateUser(request);
             log.info("New Display name : {}", record.getDisplayName());
             return record;
         } catch (FirebaseAuthException authException){
@@ -101,10 +101,10 @@ public class FirebaseAuthenticationImpl implements FirebaseAuthentication {
     }
 
     @Override
-    public String getLinkConfirmEmail(String email, String uid) {
+    public String getLinkConfirmEmail(String email) {
         try {
             ActionCodeSettings settings = ActionCodeSettings.builder()
-                    .setUrl(pathFlico + "/verified&uid="+uid)
+                    .setUrl(pathFlico)
                     .build();
             return this.gcs.getAuth().generateEmailVerificationLink(email, settings);
         } catch (FirebaseAuthException ex){

@@ -6,6 +6,7 @@ import it.dcm.rest.authentication.FirebaseAccount;
 import it.dcm.rest.exception.ResponseEntityException;
 import it.dcm.storage.command.CreationUserCommand;
 import it.dcm.storage.command.EditProfileCommand;
+import it.dcm.storage.command.ResendEmailVerificationCommand;
 import it.dcm.storage.command.ResetPasswordCommand;
 import it.dcm.storage.mapper.AccountMapper;
 import it.dcm.storage.service.FirebaseAuthentication;
@@ -34,6 +35,8 @@ public class AuthenticationController {
     private ResetPasswordCommand resetPasswordCommand;
     @Autowired
     private EditProfileCommand editProfileCommand;
+    @Autowired
+    private ResendEmailVerificationCommand resendEmailVerificationCommand;
 
 
     @GetMapping(value = "/validate-token")
@@ -78,6 +81,11 @@ public class AuthenticationController {
         );
     }
 
+    @GetMapping(value = "/resend-email-verification/{email}")
+    public ResponseEntity<Void> resendEmailVerification(@PathVariable String email){
+        this.resendEmailVerificationCommand.execute(email);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping(value = "/reset-password/{email}")
     public ResponseEntity<FirebaseAccount> getResetPassword(@PathVariable String email){
